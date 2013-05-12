@@ -306,7 +306,10 @@ end
 class ReconfirmableTest < ActiveSupport::TestCase
   test 'should not worry about validations on confirm even with reconfirmable' do
     admin = create_admin
+    puts admin.to_yaml
     admin.reset_password_token = "a"
+    puts admin.to_yaml
+    puts admin.errors.to_yaml
     assert admin.confirm!
   end
 

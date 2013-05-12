@@ -33,8 +33,8 @@ module Devise
       include ActionView::Helpers::DateHelper
 
       included do
-        before_create :generate_confirmation_token, :if => :confirmation_required?
-        after_create  :send_on_create_confirmation_instructions, :if => :send_confirmation_notification?
+#        before_create :generate_confirmation_token, :if => :confirmation_required?
+        after_create  :send_confirmation_instructions, :if => :send_confirmation_notification?
         before_update :postpone_email_change_until_confirmation, :if => :postpone_email_change?
         after_update  :send_confirmation_instructions, :if => :reconfirmation_required?
       end
@@ -98,7 +98,7 @@ module Devise
         opts = pending_reconfirmation? ? { :to => unconfirmed_email } : { }
         send_devise_notification(:confirmation_instructions, opts)
         self.confirmation_sent_at = Time.now.utc
-	save!
+        save!
       end
 
       # Resend confirmation token. This method does not need to generate a new token.
@@ -146,7 +146,8 @@ module Devise
         # instructions on creation. This can be overriden
         # in models to map to a nice sign up e-mail.
         def send_on_create_confirmation_instructions
-          send_devise_notification(:confirmation_instructions)
+          send_confirmation_instructions
+#          send_devise_notification(:confirmation_instructions)
         end
 
         # Callback to overwrite if confirmation is required or not.
