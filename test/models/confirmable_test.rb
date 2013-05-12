@@ -114,6 +114,13 @@ class ConfirmableTest < ActiveSupport::TestCase
     end
   end
 
+  test 'should not set token sent at if skip_confirmation_notification! is invoked' do
+    user = new_user
+    user.skip_confirmation_notification!
+    user.save!
+    assert_nil user.confirmation_sent_at
+  end
+
   test 'should find a user to send confirmation instructions' do
     user = create_user
     confirmation_user = User.send_confirmation_instructions(:email => user.email)
@@ -144,6 +151,14 @@ class ConfirmableTest < ActiveSupport::TestCase
     user.save
     user.send_confirmation_instructions
     assert_not_nil user.reload.confirmation_token
+  end
+
+  test 'should always have confirmation_sent_at when email is sent' do
+    user = new_user
+    user.instance_eval { def confirmation_required?; false end }
+    user.save
+    user.send_confirmation_instructions
+    assert_not_nil user.reload.confirmation_sent_at
   end
 
   test 'should not resend email instructions if the user change his email' do

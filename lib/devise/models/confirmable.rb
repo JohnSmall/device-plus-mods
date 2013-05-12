@@ -97,6 +97,8 @@ module Devise
 
         opts = pending_reconfirmation? ? { :to => unconfirmed_email } : { }
         send_devise_notification(:confirmation_instructions, opts)
+        self.confirmation_sent_at = Time.now.utc
+	save!
       end
 
       # Resend confirmation token. This method does not need to generate a new token.
@@ -109,7 +111,7 @@ module Devise
 
       # Overwrites active_for_authentication? for confirmation
       # by verifying whether a user is active to sign in or not. If the user
-      # is already confirmed, it should never be blocked. Otherwise we need to
+      # is already confirmed, it should never be bloked. Otherwise we need to
       # calculate if the confirm time has not expired for this user.
       def active_for_authentication?
         super && (!confirmation_required? || confirmed? || confirmation_period_valid?)
@@ -208,7 +210,7 @@ module Devise
         # this token is being generated
         def generate_confirmation_token
           self.confirmation_token = self.class.confirmation_token
-          self.confirmation_sent_at = Time.now.utc
+#          self.confirmation_sent_at = Time.now.utc
         end
 
         def generate_confirmation_token!
