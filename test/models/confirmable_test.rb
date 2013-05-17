@@ -306,7 +306,7 @@ end
 class ReconfirmableTest < ActiveSupport::TestCase
   test 'should not worry about validations on confirm even with reconfirmable' do
     admin = create_admin
-    admin.reset_password_token = "aaa"
+    admin.reset_password_token = "a"
     assert admin.confirm!
   end
 
