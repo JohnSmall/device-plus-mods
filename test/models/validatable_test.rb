@@ -21,8 +21,6 @@ class ValidatableTest < ActiveSupport::TestCase
     assert_match(/taken/, user.errors[:email].join)
 
     user.save(:validate => false)
-    user.valid?
-    puts user.errors.to_yaml
     assert user.valid?
   end
 
@@ -38,8 +36,6 @@ class ValidatableTest < ActiveSupport::TestCase
     end
 
     user.save(:validate => false)
-    user.valid?
-    puts user.errors.to_yaml
     assert user.valid?
   end
 
