@@ -21,6 +21,7 @@ class ValidatableTest < ActiveSupport::TestCase
     assert_match(/taken/, user.errors[:email].join)
 
     user.save(:validate => false)
+    puts "email changed? = #{user.email_changed?} old = #{user.email_was} new = #{user.email}"
     user.valid?
     puts user.errors.to_yaml
     assert user.valid?

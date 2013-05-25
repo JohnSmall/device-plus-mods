@@ -34,7 +34,8 @@ module Devise
 
       included do
         #before_create :generate_confirmation_token, :if => :confirmation_required?
-        after_create  :send_confirmation_instructions, :if => :send_confirmation_notification?
+        before_create  :send_confirmation_instructions, :if => :send_confirmation_notification?
+#        after_create  :send_confirmation_instructions, :if => :send_confirmation_notification?
         before_update :postpone_email_change_until_confirmation, :if => :postpone_email_change?
         after_update  :send_confirmation_instructions, :if => :reconfirmation_required?
       end
@@ -97,9 +98,12 @@ module Devise
         opts = pending_reconfirmation? ? { :to => unconfirmed_email } : { }
         send_devise_notification(:confirmation_instructions, opts)
         self.confirmation_sent_at = Time.now.utc
-	@bypass_postpone = true
-        save!
       end
+      # send confirmation instructions and make sure that confirmation_token and confirmation_sent_at are saved
+      def send_confirmation_instructions!
+	send_confirmation_instructions   
+        save!
+      end	      
       # Resend confirmation token. This method does not need to generate a new token.
       def resend_confirmation_token
         pending_any_confirmation do

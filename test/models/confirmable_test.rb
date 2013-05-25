@@ -149,7 +149,7 @@ class ConfirmableTest < ActiveSupport::TestCase
     user = new_user
     user.instance_eval { def confirmation_required?; false end }
     user.save
-    user.send_confirmation_instructions
+    user.send_confirmation_instructions!
     assert_not_nil user.reload.confirmation_token
   end
 
@@ -157,7 +157,7 @@ class ConfirmableTest < ActiveSupport::TestCase
     user = new_user
     user.instance_eval { def confirmation_required?; false end }
     user.save
-    user.send_confirmation_instructions
+    user.send_confirmation_instructions!
     assert_not_nil user.reload.confirmation_sent_at
   end
 
