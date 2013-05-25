@@ -255,11 +255,8 @@ class ConfirmationOnChangeTest < ActionDispatch::IntegrationTest
   test 'admin with valid confirmation token should be able to confirm email after email changed' do
     admin = create_admin
     admin.update_attributes(:email => 'new_test@example.com')
-    puts admin.to_yaml
-    puts admin.errors.to_yaml
     assert_equal 'new_test@example.com', admin.unconfirmed_email
     visit_admin_confirmation_with_token(admin.confirmation_token)
-    puts admin.reload.to_yaml
     assert_contain 'Your account was successfully confirmed.'
     assert_current_url '/admin_area/home'
     assert admin.reload.confirmed?
