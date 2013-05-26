@@ -122,7 +122,7 @@ module Devise
 
       # The message to be shown if the account is inactive.
       def inactive_message
-        !confirmed? ? :unconfirmed : super
+        confirmed? ? super : (confirmation_sent_at ? :unconfirmed : :confirmation_not_sent_yet)
       end
 
       # If you don't want confirmation to be sent on create, neither a code
